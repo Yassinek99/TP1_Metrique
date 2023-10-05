@@ -17,6 +17,13 @@ public class Tassert {
         findMethodNames();
     }
 
+    public Tloc getTloc() {
+        return tloc;
+    }
+
+    public void setTloc(Tloc tloc) {
+        this.tloc = tloc;
+    }
 
     private void findMethodNames() {
         ArrayList<String> methodsToRemove = new ArrayList<>();
@@ -47,7 +54,7 @@ public class Tassert {
             line = scanner.nextLine();
             for (String assertMethod : assertMethods) {
                 if (line.contains(assertMethod)) {
-                    System.out.println(line);
+                  //  System.out.println(line);
                     count++;
                     break;
                 }
