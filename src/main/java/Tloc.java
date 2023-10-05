@@ -4,6 +4,16 @@ import java.util.Scanner;
 
 public class Tloc {
 
+    private String strippedFile;
+
+    public String getStrippedFile() {
+        return strippedFile;
+    }
+
+    public void setStrippedFile(String strippedFile) {
+        this.strippedFile = strippedFile;
+    }
+
     public int readFile(File file){
         int nbLines =1;
         boolean insideComment =false;
@@ -33,7 +43,7 @@ public class Tloc {
                     insideComment=true;
                     continue;
                 }
-
+                strippedFile+=line+"\n";
                 nbLines++;
             }
         } catch (FileNotFoundException e) {
