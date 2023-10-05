@@ -1,14 +1,26 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
+
 
 public class Tloc {
 
     private String strippedFile;
     private int nblines;
 
+    private String packageName;
+
     public Tloc() {
         nblines=0;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public int getNblines() {
@@ -28,7 +40,6 @@ public class Tloc {
     }
 
     public void readFile(File file){
-        int nbLines =0;
         boolean insideComment =false;
         try{
             Scanner scanner = new Scanner(file);
@@ -56,8 +67,14 @@ public class Tloc {
                     insideComment=true;
                     continue;
                 }
+
+                if(line.startsWith("package")){
+
+                    packageName = line.split(" ")[line.split(" ").length-1];
+
+                }
                 strippedFile+=line+"\n";
-                nbLines++;
+                nblines++;
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
