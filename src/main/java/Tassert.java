@@ -13,31 +13,40 @@ public class Tassert {
     public Tassert(File file) {
         this.file = file;
         assertMethods = new ArrayList<>();
-        tloc =new Tloc();
+        tloc = new Tloc();
         findMethodNames();
     }
 
+
     private void findMethodNames() {
+        ArrayList<String> methodsToRemove = new ArrayList<>();
+
+        for (Method m : Main.class.getMethods()) {
+            methodsToRemove.add(m.getName());
+        }
+
         for (Method m : org.junit.Assert.class.getMethods()) {
 
-            if (!assertMethods.contains(m.getName())) {
-                assertMethods.add(m.getName());
+            if (!methodsToRemove.contains(m.getName())) {
+                if (!assertMethods.contains(m.getName())) {
+                    assertMethods.add(m.getName());
+                }
             }
         }
     }
 
-    public int countAssert()  {
+    public int countAssert() {
         tloc.readFile(file);
         String code = tloc.getStrippedFile();
 
         Scanner scanner = new Scanner(code);
         String line;
-        int count =0;
+        int count = 0;
 
-        while (scanner.hasNextLine()){
+        while (scanner.hasNextLine()) {
             line = scanner.nextLine();
             for (String assertMethod : assertMethods) {
-                if(line.contains(assertMethod)){
+                if (line.contains(assertMethod)) {
                     System.out.println(line);
                     count++;
                     break;
@@ -46,8 +55,6 @@ public class Tassert {
         }
         return count;
     }
-
-
 
 
 }
