@@ -69,9 +69,8 @@ public class Tloc {
                 }
 
                 if(line.startsWith("package")){
-
                     packageName = line.split(" ")[line.split(" ").length-1];
-
+                    packageName = packageName.substring(0,packageName.length()-1);
                 }
                 strippedFile+=line+"\n";
                 nblines++;

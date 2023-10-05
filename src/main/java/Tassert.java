@@ -9,12 +9,22 @@ public class Tassert {
     private File file;
     private ArrayList<String> assertMethods;
     private Tloc tloc;
+    private int nbAsserts;
 
     public Tassert(File file) {
         this.file = file;
         assertMethods = new ArrayList<>();
         tloc = new Tloc();
         findMethodNames();
+        nbAsserts =0;
+    }
+
+    public int getNbAsserts() {
+        return nbAsserts;
+    }
+
+    public void setNbAsserts(int nbAsserts) {
+        this.nbAsserts = nbAsserts;
     }
 
     public Tloc getTloc() {
@@ -42,25 +52,23 @@ public class Tassert {
         }
     }
 
-    public int countAssert() {
+    public void countAssert() {
         tloc.readFile(file);
         String code = tloc.getStrippedFile();
 
         Scanner scanner = new Scanner(code);
         String line;
-        int count = 0;
 
         while (scanner.hasNextLine()) {
             line = scanner.nextLine();
             for (String assertMethod : assertMethods) {
                 if (line.contains(assertMethod)) {
                   //  System.out.println(line);
-                    count++;
+                    nbAsserts++;
                     break;
                 }
             }
         }
-        return count;
     }
 
 
