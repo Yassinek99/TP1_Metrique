@@ -1,23 +1,76 @@
+import com.opencsv.CSVWriter;
+
+import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
+
+        runTls(args);
+
+
+    }
+
+    public static void runTloc(String[] args){
         Tloc tloc = new Tloc();
+        tloc.readFile(new File(args[0]));
+        System.out.println(tloc.getNblines());
+    }
 
-       //int count =tloc.readFile(new File("src/main/resources/jfreechart/src/test/java/org/jfree/chart/title/TitleTest.java"));
-     //  System.out.println(count);
-//
-      //  System.out.println(tloc.getStrippedFile());
-        Tassert tassert = new Tassert(new File("src/main/resources/jfreechart/src/test/java/org/jfree/chart/title/TitleTest.java"));
-        System.out.println(tassert.countAssert());
+    public static void runTassert(String[] args){
+        Tassert tassert = new Tassert(new File(args[0]));
+        tassert.countAssert();
+        System.out.println(tassert.getNbAsserts());
+    }
 
-       // Tls tls = new Tls("src/main/resources/jfreechart/src/test/java/org/jfree/chart/title");
-        //tls.readDir();
+    public static void runTls(String[] args) throws IOException {
+        Tls tls = new Tls();
 
+        if(args.length>1){
+            FileWriter fileWriter = new FileWriter(new File(args[0]));
+
+            tls.readDir(args[1]);
+
+            for(TlsData t: tls.getResults()){
+                fileWriter.write(t.toString()+"\n");
+            }
+            fileWriter.close();
+
+            System.out.println("Output file: "+args[0]);
+
+        }else {
+            tls.readDir(args[0]);
+            for(TlsData t: tls.getResults()){
+                System.out.println(t);
+            }
+        }
+    }
+
+    public static void runTropComp(String[] args) throws IOException {
+        if (args.length > 2) {
+            TropComp tropComp = new TropComp(args[1], Double.parseDouble(args[2]));
+
+            tropComp.findAboveThreshold();
+
+            FileWriter fileWriter = new FileWriter(new File(args[0]));
+            for (TlsData t : tropComp.getResults()) {
+                fileWriter.write(t.toString() + "\n");
+            }
+            fileWriter.close();
+
+            System.out.println("Output file: "+args[0]);
+
+        }else{
+            TropComp tropComp = new TropComp(args[0], Double.parseDouble(args[1]));
+            tropComp.findAboveThreshold();
+            tropComp.printResult();
+        }
     }
 }
